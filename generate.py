@@ -93,7 +93,7 @@ def generateVideoClip(url):
         introClip = ImageClip('assets/newzery.png').resize(width=WIDTH, height=HEIGHT).set_pos(
             ('center', 'center')).set_duration(total_duration + INTRO_TIMEOUT).fadein(FADE_TIMEOUT)
         finalClip = CompositeVideoClip([introClip, textClip.set_start(
-            INTRO_TIMEOUT).set_position('center', 'center')]).set_duration(total_duration + INTRO_TIMEOUT)  # .set_audio(AudioFileClip(get_music_path(text)))
+            INTRO_TIMEOUT).set_position('center', 'center')]).set_audio(AudioFileClip(get_music_path(text))).set_duration(total_duration + INTRO_TIMEOUT)
         finalClip.write_videofile('final.mp4', fps=30, codec='mpeg4')
         generated = 1
     except Exception as e:
