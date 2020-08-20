@@ -76,7 +76,7 @@ def getTextClip(text):
     textClip = []
     for line in text[0:N_TEXT]:
         textClip.append(TextClip(line, size=(WIDTH, HEIGHT), fontsize=50,
-                                 font='AvantGarde-Book', color='black', stroke_width=5,
+                                 font='DejaVu-Sans-Bold', color='black', stroke_width=5,
                                  align='center', method='caption', kerning=1)
                         .set_duration(TEXT_TIMEOUT).on_color(color=(255, 255, 255), col_opacity=0.5)
                         .fadein(FADE_TIMEOUT).fadeout(FADE_TIMEOUT))
