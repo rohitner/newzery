@@ -1,11 +1,8 @@
 from newspaper import Article
 import urllib.request
 import numpy as np
-from sumy.parsers.plaintext import PlaintextParser
-from sumy.nlp.tokenizers import Tokenizer
 from sumy.summarizers.lex_rank import LexRankSummarizer
 from moviepy.editor import *
-from moviepy.video.tools.drawing import color_gradient
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 import random
 
@@ -71,30 +68,38 @@ def getArticleText(url):
     return text
 
 
-def getTextClip(text):
-    total_duration = 0
-    textClip = []
-    for line in text[0:N_TEXT]:
-        textClip.append(TextClip(line, size=(WIDTH, HEIGHT), fontsize=50,
-                                 font='DejaVu-Sans-Bold', color='black', stroke_width=5,
-                                 align='center', method='caption', kerning=1)
-                        .set_duration(TEXT_TIMEOUT).on_color(color=(255, 255, 255), col_opacity=0.5)
-                        .fadein(FADE_TIMEOUT).fadeout(FADE_TIMEOUT))
-        total_duration += TEXT_TIMEOUT
-    return concatenate(textClip, method='chain'), total_duration
-
-
 def generateVideoClip(url):
     generated = 0
     try:
         text = getArticleText(url)
-        textClip, total_duration = getTextClip(text)
+
+        total_duration = 0
+        textClip = []
+        for line in text[0:N_TEXT]:
+            with TextClip(line, size=(WIDTH, HEIGHT), fontsize=50, font='DejaVu-Sans-Bold',
+                          color='black', stroke_width=5, align='center', method='caption', kerning=1) \
+                    .set_duration(TEXT_TIMEOUT).on_color(color=(255, 255, 255), col_opacity=0.5) \
+                    .fadein(FADE_TIMEOUT).fadeout(FADE_TIMEOUT) as clip:
+                textClip.append(clip)
+            total_duration += TEXT_TIMEOUT
+        textClip = concatenate(textClip, method='chain')
+
+        musicClip = AudioFileClip(get_music_path(text))
+
         # append intro : dont concat image with text, causes pixelation
         introClip = ImageClip('assets/newzery.png').resize(width=WIDTH, height=HEIGHT).set_pos(
             ('center', 'center')).set_duration(total_duration + INTRO_TIMEOUT).fadein(FADE_TIMEOUT)
+
         finalClip = CompositeVideoClip([introClip, textClip.set_start(
-            INTRO_TIMEOUT).set_position('center', 'center')]).set_audio(AudioFileClip(get_music_path(text))).set_duration(total_duration + INTRO_TIMEOUT)
+            INTRO_TIMEOUT).set_position('center', 'center')]).set_audio(musicClip).set_duration(total_duration + INTRO_TIMEOUT)
+
         finalClip.write_videofile('final.mp4', fps=30, codec='mpeg4')
+
+        textClip.close()
+        musicClip.close()
+        introClip.close()
+        finalClip.close()
+
         generated = 1
     except Exception as e:
         print(e)
