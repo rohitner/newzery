@@ -1,5 +1,5 @@
 import random
-import os
+import os, gc
 from flask import Flask, request
 from pymessenger.bot import Bot
 from generate import generateVideoClip
@@ -35,7 +35,6 @@ def receive_message():
                         print('text')
                         print(url)
                         videoThread = Thread(target=pushVideoClip, args=(recipient_id, url,))
-                        videoThread.daemon = True
                         videoThread.start()
                         # send_message(recipient_id, 'Sorry, your request could not be processed :/')
                         # send_video(recipient_id, '/home/rohitner/newzery/stock.mp4')
@@ -55,6 +54,7 @@ def pushVideoClip(recipient_id, url):
         send_video(recipient_id, os.getcwd() + '/final.mp4')
     else:
         send_message(recipient_id, 'Your request could not be processed, please ensure you\'ve entered a valid url')
+    gc.collect()
 
 
 def verify_fb_token(token_sent):
