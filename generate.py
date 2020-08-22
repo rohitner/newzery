@@ -68,7 +68,7 @@ def getArticleText(url):
     return text
 
 
-def generateVideoClip(url):
+def generateVideoClip(url, clip_duration):
     generated = 0
     try:
         text = getArticleText(url)

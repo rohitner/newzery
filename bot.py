@@ -8,6 +8,7 @@ from threading import Thread
 app = Flask(__name__)
 ACCESS_TOKEN = os.environ.get('ACCESS_TOKEN')
 VERIFY_TOKEN = os.environ.get('VERIFY_TOKEN')
+QUICK_REPLIES = ['15', '20', '25']
 bot = Bot(ACCESS_TOKEN)
 
 
@@ -29,31 +30,36 @@ def receive_message():
                 if message.get('message'):
                     # Facebook Messenger ID for user so we know where to send response back to
                     recipient_id = message['sender']['id']
-                    if message['message'].get('text'):
-                        # response_sent_text = get_message()
+                    if message['message'].get('quick_reply'):
+                        quick_reply = message['message'].get('quick_reply')
+                        url = quick_reply['payload']
+                        clip_duration = message['message'].get('text')
+                        print('quick_reply')
+                        print(clip_duration, url)
+                        videoThread = Thread(target=pushVideoClip, args=(recipient_id, url, clip_duration,))
+                        videoThread.start()
+                    # If url message, send quicky reply to get clip duration
+                    elif message['message'].get('text'):
                         url = message['message'].get('text')
                         print('text')
                         print(url)
-                        videoThread = Thread(target=pushVideoClip, args=(recipient_id, url,))
-                        videoThread.start()
-                        # send_message(recipient_id, 'Sorry, your request could not be processed :/')
-                        # send_video(recipient_id, '/home/rohitner/newzery/stock.mp4')
+                        # print(message)
+                        sendQuickReply(recipient_id, 'Choose a preferred video duration in seconds', url)
                     # if user sends us a GIF, photo,video, or any other non-text item
                     if message['message'].get('attachments'):
                         print('attachment')
                         # TODO: only entertain richlink conversions
                         print(message['message'].get('attachments'))
-                        # response_sent_nontext = get_message()
-                        # send_message(recipient_id, response_sent_nontext)
     return "Message Processed"
 
 
-def pushVideoClip(recipient_id, url):
+def pushVideoClip(recipient_id, url, clip_duration):
     send_message(recipient_id, 'We are processing your request')
-    if(generateVideoClip(url) == 1):
+    if(generateVideoClip(url, clip_duration) == 1):
         send_video(recipient_id, os.getcwd() + '/final.mp4')
     else:
         send_message(recipient_id, 'Your request could not be processed, please ensure you\'ve entered a valid url')
+    # garbage collector to avoid heroku error R14
     gc.collect()
 
 
@@ -82,6 +88,11 @@ def send_message(recipient_id, response):
 def send_video(recipient_id, video_path):
     """sends user the video file provided via `video_path` parameter"""
     bot.send_video(recipient_id, video_path)
+
+
+def sendQuickReply(recipient_id, text, url):
+    bot.send_quick_replies_message(recipient_id, text, QUICK_REPLIES,
+                                   list_of_payloads=len(QUICK_REPLIES) * [url])
 
 
 if __name__ == "__main__":
