@@ -3,7 +3,7 @@ import os, gc
 from flask import Flask, request
 from pymessenger.bot import Bot
 from generate import generateVideoClip
-from threading import Thread
+from threading import Thread, enumerate
 
 app = Flask(__name__)
 ACCESS_TOKEN = os.environ.get('ACCESS_TOKEN')
@@ -41,13 +41,19 @@ def receive_message():
                     # If url message, send quicky reply to get clip duration
                     elif message['message'].get('text'):
                         url = message['message'].get('text')
-                        print('text')
-                        print(url)
                         # print(message)
-                        sendQuickReply(recipient_id, 'Choose a preferred video duration in seconds', url)
+                        print('text')
+                        print(url, len(enumerate()))
+                        # prevent concurrent requests
+                        if(len(enumerate()) > 2):
+                            send_message(recipient_id, 'Server full: please try again in few minutes')
+                        else:
+                            sendQuickReply(recipient_id, 'Choose a preferred video duration in seconds', url)
                     # if user sends us a GIF, photo,video, or any other non-text item
                     if message['message'].get('attachments'):
                         print('attachment')
+                        for thread in enumerate():
+                            print(thread.name)
                         # TODO: only entertain richlink conversions
                         print(message['message'].get('attachments'))
     return "Message Processed"
