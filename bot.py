@@ -43,12 +43,7 @@ def receive_message():
                         url = message['message'].get('text')
                         # print(message)
                         print('text')
-                        print(url, len(enumerate()))
-                        # prevent concurrent requests
-                        if(len(enumerate()) > 2):
-                            send_message(recipient_id, 'Server full: please try again in few minutes')
-                        else:
-                            sendQuickReply(recipient_id, 'Choose a preferred video duration in seconds', url)
+                        sendQuickReply(recipient_id, 'Choose a preferred video duration in seconds', url)
                     # if user sends us a GIF, photo,video, or any other non-text item
                     if message['message'].get('attachments'):
                         print('attachment')
@@ -56,12 +51,20 @@ def receive_message():
                             print(thread.name)
                         # TODO: only entertain richlink conversions
                         print(message['message'].get('attachments'))
+    gc.collect()
     return "Message Processed"
 
 
 def pushVideoClip(recipient_id, url, clip_duration):
+    print(url, len(enumerate()))
+    # prevent concurrent requests
+    if(len(enumerate()) > 3):
+        send_message(recipient_id, 'Server full: please try again in few minutes')
+        gc.collect()
+        return
     send_message(recipient_id, 'We are processing your request')
     if(generateVideoClip(url, clip_duration) == 1):
+        send_message(recipient_id, 'Here\'s a newzery of the article 🎉')
         send_video(recipient_id, os.getcwd() + '/final.mp4')
     else:
         send_message(recipient_id, 'Your request could not be processed, please ensure you\'ve entered a valid url')
