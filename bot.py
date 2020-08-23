@@ -8,7 +8,7 @@ from threading import Thread, enumerate
 app = Flask(__name__)
 ACCESS_TOKEN = os.environ.get('ACCESS_TOKEN')
 VERIFY_TOKEN = os.environ.get('VERIFY_TOKEN')
-QUICK_REPLIES = ['15', '20', '25']
+QUICK_REPLIES = ['15', '20']
 bot = Bot(ACCESS_TOKEN)
 
 

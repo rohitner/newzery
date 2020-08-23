@@ -8,7 +8,7 @@ import random
 
 ARTICLE_URL = "https://www.androidpolice.com/2020/08/17/facebook-starts-integrating-messenger-with-instagram/"
 N_TEXT = 3
-WIDTH, HEIGHT = 1280, 720
+WIDTH, HEIGHT = 900, 600
 INTRO_TIMEOUT = 2
 TEXT_TIMEOUT = 4
 FADE_TIMEOUT = 1
@@ -71,6 +71,10 @@ def getArticleText(url):
 
 
 def generateVideoClip(url, clip_duration):
+    if(clip_duration == 20):
+        N_TEXT = 4
+    else:
+        N_TEXT = 3
     generated = 0
     try:
         text = getArticleText(url)
@@ -78,7 +82,7 @@ def generateVideoClip(url, clip_duration):
         total_duration = 0
         textClip = []
         for line in text[0:N_TEXT]:
-            with TextClip(line, size=(WIDTH, HEIGHT), fontsize=50, font='DejaVu-Sans',
+            with TextClip(line, size=(WIDTH, HEIGHT), fontsize=30, font='DejaVu-Sans',
                           color='black', stroke_width=5, align='center', method='caption', kerning=1) \
                     .set_duration(TEXT_TIMEOUT).on_color(color=(255, 255, 255), col_opacity=0.5) \
                     .fadein(FADE_TIMEOUT).fadeout(FADE_TIMEOUT) as clip:
