@@ -12,6 +12,8 @@ WIDTH, HEIGHT = 1280, 720
 INTRO_TIMEOUT = 2
 TEXT_TIMEOUT = 4
 FADE_TIMEOUT = 1
+CODEC = 'libx264'
+FPS = 24
 
 
 def download_web_image(url, i):
@@ -76,7 +78,7 @@ def generateVideoClip(url, clip_duration):
         total_duration = 0
         textClip = []
         for line in text[0:N_TEXT]:
-            with TextClip(line, size=(WIDTH, HEIGHT), fontsize=50, font='DejaVu-Sans-Bold',
+            with TextClip(line, size=(WIDTH, HEIGHT), fontsize=50, font='DejaVu-Sans',
                           color='black', stroke_width=5, align='center', method='caption', kerning=1) \
                     .set_duration(TEXT_TIMEOUT).on_color(color=(255, 255, 255), col_opacity=0.5) \
                     .fadein(FADE_TIMEOUT).fadeout(FADE_TIMEOUT) as clip:
@@ -93,7 +95,7 @@ def generateVideoClip(url, clip_duration):
         finalClip = CompositeVideoClip([introClip, textClip.set_start(
             INTRO_TIMEOUT).set_position('center', 'center')]).set_audio(musicClip).set_duration(total_duration + INTRO_TIMEOUT)
 
-        finalClip.write_videofile('final.mp4', fps=30, codec='mpeg4')
+        finalClip.write_videofile('final.mp4', fps=FPS, codec=CODEC)
 
         textClip.close()
         musicClip.close()
@@ -107,4 +109,4 @@ def generateVideoClip(url, clip_duration):
 
 
 if __name__ == "__main__":
-    generateVideoClip(ARTICLE_URL)
+    generateVideoClip(ARTICLE_URL, 0)
