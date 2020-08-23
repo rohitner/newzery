@@ -93,7 +93,7 @@ def generateVideoClip(url, clip_duration):
         musicClip = AudioFileClip(get_music_path(text))
 
         # append intro : dont concat image with text, causes pixelation
-        introClip = ImageClip('assets/newzery.png').resize(width=WIDTH, height=HEIGHT).set_pos(
+        introClip = ImageClip('static/newzery.png').resize(width=WIDTH, height=HEIGHT).set_pos(
             ('center', 'center')).set_duration(total_duration + INTRO_TIMEOUT).fadein(FADE_TIMEOUT)
 
         finalClip = CompositeVideoClip([introClip, textClip.set_start(

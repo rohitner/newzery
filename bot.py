@@ -1,6 +1,6 @@
 import random
 import os, gc
-from flask import Flask, request
+from flask import Flask, request, render_template
 from pymessenger.bot import Bot
 from generate import generateVideoClip
 from threading import Thread, enumerate
@@ -12,8 +12,13 @@ QUICK_REPLIES = ['15', '20']
 bot = Bot(ACCESS_TOKEN)
 
 
+@app.route("/", methods=['GET'])
+def landing_page():
+    return render_template('landing.html')
+
+
 # We will receive messages that Facebook sends our bot at this endpoint
-@app.route("/", methods=['GET', 'POST'])
+@app.route("/bot", methods=['GET', 'POST'])
 def receive_message():
     if request.method == 'GET':
         """Before allowing people to message your bot, Facebook has implemented a verify token

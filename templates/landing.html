@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Newzery</title>
+    <style>
+        body {
+            overflow-x: hidden;
+            margin: 0;
+        }
+
+        .logocon {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100vw;
+            height: 100vh;
+            background: #e61919;
+            animation: color 30s linear infinite;
+            user-select: none;
+            position: fixed;
+            top: 0;
+            z-index: 3;
+        }
+
+        .logo {
+            font: 300 150px Comfortaa;
+            color: #fff;
+            cursor: default;
+        }
+
+        .hint {
+            position: fixed;
+            z-index: 4;
+            bottom: 10vh;
+            width: 100vw;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            font: 300 30px Comfortaa;
+        }
+
+        .content {
+            padding: 30px;
+            position: relative;
+            top: 20vh;
+            height: 200vh;
+            font: 16px Ubuntu;
+        }
+
+        @-moz-keyframes color {
+            0% {
+                background: #e61919;
+            }
+
+            25% {
+                background: #7f19e6;
+            }
+
+            50% {
+                background: #19e5e6;
+            }
+
+            75% {
+                background: #80e619;
+            }
+
+            100% {
+                background: #e61919;
+            }
+        }
+
+        @-webkit-keyframes color {
+            0% {
+                background: #e61919;
+            }
+
+            25% {
+                background: #7f19e6;
+            }
+
+            50% {
+                background: #19e5e6;
+            }
+
+            75% {
+                background: #80e619;
+            }
+
+            100% {
+                background: #e61919;
+            }
+        }
+
+        @-o-keyframes color {
+            0% {
+                background: #e61919;
+            }
+
+            25% {
+                background: #7f19e6;
+            }
+
+            50% {
+                background: #19e5e6;
+            }
+
+            75% {
+                background: #80e619;
+            }
+
+            100% {
+                background: #e61919;
+            }
+        }
+
+        @keyframes color {
+            0% {
+                background: #e61919;
+            }
+
+            25% {
+                background: #7f19e6;
+            }
+
+            50% {
+                background: #19e5e6;
+            }
+
+            75% {
+                background: #80e619;
+            }
+
+            100% {
+                background: #e61919;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="logocon"><img src="/static/text.png"></div>
+</body>
+
+</html>
