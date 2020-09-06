@@ -1,0 +1,31 @@
+{
+    "name": "Newzery Demo",
+    "description": "Article2Video messenger bot",
+    "repository": "https://github.com/rohitner/newzery",
+    "logo": "https://github.com/rohitner/newzery/blob/master/static/newzery_icon.png",
+    "keywords": [
+        "python",
+        "flask",
+        "moviepy",
+        "messenger"
+    ],
+    "buildpacks": [
+        {
+            "url": "https://github.com/DuckyTeam/heroku-buildpack-imagemagick"
+        },
+        {
+            "url": "heroku/python"
+        }
+    ],
+    "env": {
+        "ACCESS_TOKEN": {
+            "description": "Acess token of facebook page.",
+            "value": "ENTER_YOUR_TOKEN_HERE_LATER"
+        },
+        "VERIFY_TOKEN": {
+            "description": "Verify token for webhook.",
+            "value": "NEWZTOKEN"
+        }
+    },
+    "success_url": "/"
+}
